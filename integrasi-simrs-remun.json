@@ -1,0 +1,696 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Integrasi SIMRS - SIM Remunerasi",
+    "description": "Integrasi SIMRS - SIM Remunerasi",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://simrs.rsudtulungagung.com/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "admission",
+      "description": "about admission pasien"
+    },
+    {
+      "name": "billing",
+      "description": "about admission billing"
+    }
+  ],
+  "paths": {
+    "/admission": {
+      "post": {
+        "tags": [
+          "admission"
+        ],
+        "summary": "SIMRS mengirim data Admission baru ke WS SIM Remun",
+        "description": "Add a new admission to the WS SIM Remun",
+        "operationId": "addAdmission",
+        "requestBody": {
+          "description": "Create a new admission in the WS SIM Remun",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admission"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Admission"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Admission"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admission"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admission"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "simrs_auth": [
+              "write:admission",
+              "read:admission"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "admission"
+        ],
+        "summary": "SIMRS mengirimkan update data an existing admission",
+        "description": "Update an existing admission by Id",
+        "operationId": "updateAdmission",
+        "requestBody": {
+          "description": "Update an existent admission in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admission"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Admission"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Admission"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admission"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admission"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Admission not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "simrs_auth": [
+              "write:admission",
+              "read:admission"
+            ]
+          }
+        ]
+      }
+    },
+    "/admission/{admissionId}": {
+      "get": {
+        "tags": [
+          "admission"
+        ],
+        "summary": "SIM Remunerasi menggembalikan respon data",
+        "parameters": [
+          {
+            "name": "admissionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get admission detail successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Admission"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to get admission data"
+          },
+          "404": {
+            "description": "admission id not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admission"
+        ],
+        "description": "SIMRS mengirim data penghapusan admission",
+        "summary": "SIMRS mengirim data hapus admission",
+        "parameters": [
+          {
+            "name": "admissionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "delete admission successfully"
+          },
+          "400": {
+            "description": "failed to delete admission"
+          },
+          "404": {
+            "description": "admission id not found"
+          }
+        }
+      }
+    },
+    "/admission/{admissionId}/billing": {
+      "post": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "SIMRS mengirimkan data post admissions billing detail ke SIM Remun",
+        "description": "SIMRS mengirimkan data post admissions billing detail ke SIM Remun",
+        "operationId": "postBilling",
+        "parameters": [
+          {
+            "name": "admissionId",
+            "in": "path",
+            "description": "Id of admission",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Billing"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Billing"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Billing"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successfull post billing"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/admission/{admissionId}/billing/{billingDetailId}": {
+      "put": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "SIMRS melakukan update data update billing ke SIM Remun",
+        "description": "SIMRS melakukan update data update billing ke SIM Remun",
+        "operationId": "putBilling",
+        "parameters": [
+          {
+            "name": "admissionId",
+            "in": "path",
+            "description": "Id of admission",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "billingDetailId",
+            "in": "path",
+            "description": "id tindakan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Billing"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Billing"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Billing"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successfull post billing"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "delete billing by Id",
+        "description": "Delete billing detail with and id",
+        "operationId": "deleteBillingDetail",
+        "parameters": [
+          {
+            "name": "admissionId",
+            "in": "path",
+            "description": "Id kunjungan/admission pasien",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "billingDetailId",
+            "in": "path",
+            "description": "id billing detail dari simrs",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "delete successfully"
+          },
+          "400": {
+            "description": "invalid id"
+          },
+          "404": {
+            "description": "admission id or billing detail id not found"
+          }
+        }
+      }
+    },
+    "/ruangan": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "get list ruangan",
+        "description": "return list of ruangan",
+        "operationId": "getRuangan",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application.json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Ruangan"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dokter/{dokterId}": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "get dokter information",
+        "description": "return a dokter information",
+        "operationId": "getDokter",
+        "parameters": [
+          {
+            "name": "dokterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "dokter detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Dokter"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to get dokter data"
+          },
+          "404": {
+            "description": "dokter id not found"
+          }
+        }
+      }
+    },
+    "/tarif/{tarifId}": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "operationId": "getTarif",
+        "parameters": [
+          {
+            "name": "tarifId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tarif detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Tarif"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to get tarif data"
+          },
+          "404": {
+            "description": "tarif id not found"
+          }
+        }
+      }
+    },
+    "/kelompok-tarif/{kelompokTarifId}": {
+      "summary": "get kelompok tarif information ",
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "operationId": "getKelompokTarif",
+        "parameters": [
+          {
+            "name": "kelompokTarifId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "kelompok tarif detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/KelompokPembagianJasa"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Tarif": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "kode tarif",
+            "example": 900
+          },
+          "kelompok_pembagian_jasa_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "kelompok pembagian tarif berdasarkan rumusan pembagian jasa",
+            "example": 100
+          },
+          "nama": {
+            "type": "string",
+            "description": "nama tarif",
+            "example": "Pasang infus"
+          },
+          "harga": {
+            "type": "integer",
+            "format": "int64",
+            "description": "harga tarif",
+            "example": 1000000
+          },
+          "unit_cost": {
+            "type": "number",
+            "format": "f64",
+            "description": "biaya unit cost",
+            "example": 1500.5
+          },
+          "jasa": {
+            "type": "number",
+            "format": "f64",
+            "description": "jasa diluar unit cost yang diterima oleh rumah sakit",
+            "example": 100
+          }
+        }
+      },
+      "KelompokPembagianJasa": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "kode kelompok tarif",
+            "example": 100
+          },
+          "nama": {
+            "type": "string",
+            "description": "nama kelompok tarif",
+            "example": "kelompok tarif pelayanan intensif"
+          }
+        }
+      },
+      "Dokter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "kode dokter",
+            "example": 100
+          },
+          "nama": {
+            "type": "string",
+            "description": "nama dokter",
+            "example": "dr. Supriyanto, Sp.B. M.Kes"
+          }
+        }
+      },
+      "Ruangan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Kode ruangan",
+            "example": 203
+          },
+          "nama": {
+            "type": "string",
+            "description": "nama ruangan",
+            "example": "CEMPAKA"
+          }
+        }
+      },
+      "Admission": {
+        "required": [
+          "nomor_pendaftaran",
+          "tanggal_masuk",
+          "nomor_rekam_medis"
+        ],
+        "type": "object",
+        "properties": {
+          "nomor_pendaftaran": {
+            "type": "string",
+            "example": 202201010000001
+          },
+          "tanggal_masuk": {
+            "type": "string"
+          },
+          "nomor_rekam_medis": {
+            "type": "string"
+          },
+          "nama_pasien": {
+            "type": "string"
+          },
+          "tanggal_keluar": {
+            "type": "string"
+          },
+          "tanggal_verifikasi": {
+            "description": "tanggal verifikasi/posting billing",
+            "type": "string"
+          },
+          "jenis_pembayaran": {
+            "type": "string"
+          }
+        }
+      },
+      "Billing": {
+        "type": "object",
+        "properties": {
+          "kode_transaksi": {
+            "type": "string",
+            "description": "kode unik transaksi untuk tarif yang sama"
+          },
+          "kode_pemeriksaan": {
+            "type": "string",
+            "description": "billing id"
+          },
+          "admission_id": {
+            "type": "string",
+            "description": "admission id from admission"
+          },
+          "tanggal_layanan": {
+            "type": "string"
+          },
+          "kode_tarif": {
+            "type": "string"
+          },
+          "nama_tarif": {
+            "type": "string"
+          },
+          "kode_ruangan": {
+            "type": "string"
+          },
+          "kode_dokter": {
+            "type": "string"
+          },
+          "nama_dokter": {
+            "type": "string"
+          },
+          "jenis_pelayanan": {
+            "type": "integer",
+            "format": "int32",
+            "description": "1 jenis pelayanan regular, 2 jenis pelayanan paviliun/eksekutif",
+            "example": 1
+          },
+          "pelaksana": {
+            "type": "integer",
+            "format": "int32",
+            "description": "1 dilakukan dokter, 2 dilakukan paramedis",
+            "example": 2
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "simrs_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
+            "scopes": {
+              "write:pets": "modify pets in your account",
+              "read:pets": "read your pets"
+            }
+          }
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      }
+    }
+  }
+}
